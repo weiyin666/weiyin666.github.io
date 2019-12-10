@@ -220,6 +220,110 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/%E9%85%8D%E7%BD%AE%20GitHub%20SSH%20%E8%BF%9E%E6%8E%A5SSHkey/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.JPG">
+      <meta itemprop="name" content="牛浩东">
+      <meta itemprop="description" content="涉猎的主要编程语言为 Python领域技术分享。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="咸鱼blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/12/10/%E9%85%8D%E7%BD%AE%20GitHub%20SSH%20%E8%BF%9E%E6%8E%A5SSHkey/" class="post-title-link" itemprop="url">配置 GitHub SSH 连接SSHkey</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-10 17:52:55 / 修改时间：18:23:42" itemprop="dateCreated datePublished" datetime="2019-12-10T17:52:55+08:00">2019-12-10</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>767</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="添加SSHkey"><a href="#添加SSHkey" class="headerlink" title="添加SSHkey"></a>添加SSHkey</h2><blockquote>
+<h2 id="SSH介绍"><a href="#SSH介绍" class="headerlink" title="SSH介绍"></a>SSH介绍</h2><ul>
+<li>简单说，SSH是一种<strong>网络协议</strong>，用于计算机之间的<strong>加密登录</strong>。 </li>
+<li>如果一个用户从本地计算机，<strong>使用SSH</strong>协议登录另一台远程计算机，我们就可以认为，这种登录是<strong>安全</strong>的，即使被中途截获，密码也不会泄露。 </li>
+<li>最早的时候，互联网通信都是明文通信，一旦被截获，内容就暴露无疑。1995年，芬兰学者TatuYlonen设计了SSH协议，将<strong>登录信息全部加密</strong>，成为互联网安全的一个基本解决方案，迅速在全世界获得推广，目前已经成为Linux系统的标准配置。 </li>
+<li>在这里你只需要知道使用GitHub之前需要添加SSHkey，用来验证GitHub远程仓库就可以了，如果想深入了解原理，参考 <a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html" target="_blank" rel="noopener"> 阮一峰老师的SSH原理 </a></li>
+</ul>
+</blockquote>
+<h2 id="获取SSHKEY"><a href="#获取SSHKEY" class="headerlink" title="获取SSHKEY"></a>获取SSHKEY</h2><p>首先打开Git Bash</p>
+<p>复制运行 <code>ssh-keygen -t rsa -b 4096 -C &quot;你的邮箱&quot;</code>，注意填写你的真实邮箱。(温馨提示Git Bash的复制键是Insert) </p>
+<p>按回车三次</p>
+<p> 参考示例： </p>
+<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/KQGNGTOXZ9ODRXKGG30.png" alt="咸鱼 blog"></p>
+<p> 这时会在~目录下生成一个.ssh的隐藏文件</p>
+<p> 运行 <code>cat ~/.ssh/id_rsa.pub</code>，得到一串东西，完整的复制这串东西 </p>
+<p>参考示例： </p>
+<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/EI94MKO58V1Z2CO3MU9.png" alt="咸鱼 blog"></p>
+<p>然后打开Git Hub  链接：<a href="https://github.com/settings/keys" target="_blank" rel="noopener">https://github.com/settings/keys</a> </p>
+<p>在Title框里随便填</p>
+<p>然后把刚刚复制的一长串东西粘贴到key框里，点Add SSH key就好了。</p>
+<p>参考示例： </p>
+<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/DBU22FVK6G306XM0.png" alt="咸鱼 blog"></p>
+<p>然后回到Git Bash</p>
+<p>运行  <code>ssh -T git@github.com</code> 你会看到以下提示：</p>
+<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/KWLGZ179EZDWYA3ADEOG.png" alt="咸鱼 blog"></p>
+<p>就说明你成功了！</p>
+<ul>
+<li>一台电脑只需要一个 SSH key</li>
+<li>一个 SSH key 可以访问你的所有仓库，即使你有 1000000 个仓库，都没问题</li>
+<li>如果你新买了电脑，就在新电脑上重新生成一个 SSH key，把这个 key 也上传到 GitHub，它可以和之前的 key 共存在 GitHub 上</li>
+<li>如果你把 key 从电脑上删除了，重新生成一个 key 即可，替换之前的 key </li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -359,7 +463,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -412,7 +516,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">0k</span>
+    <span title="站点总字数">1k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
