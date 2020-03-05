@@ -223,225 +223,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://weiyin666.github.io/2019/12/24/%E8%85%BE%E8%AE%AF%E6%8B%9B%E8%81%98%E7%88%AC%E5%8F%96-python/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/1.JPG">
-      <meta itemprop="name" content="牛浩东">
-      <meta itemprop="description" content="涉猎的主要编程语言为 Python领域技术分享。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="咸鱼blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/12/24/%E8%85%BE%E8%AE%AF%E6%8B%9B%E8%81%98%E7%88%AC%E5%8F%96-python/" class="post-title-link" itemprop="url">腾讯招聘爬取 - python</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-24 08:14:25 / 修改时间：09:09:22" itemprop="dateCreated datePublished" datetime="2019-12-24T08:14:25+08:00">2019-12-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
- 
-	<div class="post-body" itemprop="articleBody">
-	<div>
-      
-          <h3 id="开搞"><a href="#开搞" class="headerlink" title="开搞"></a>开搞</h3><p>首先分析网页：</p>
-<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/1-1.png" alt="咸鱼 blog"></p>
-<p>乍一看，嗯……，已经分析好了，从列表页用xpath，获取到详情页的id，遍历出来访问就行了。</p>
-<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/2.jpg" alt="咸鱼 blog"></p>
-<p>当我把xpath代码写好，取出来正常ID值的时候，我已经以为尘埃落地，直接按照代码运行逻辑走的时候，才发现，我陷入了一个大坑。</p>
-<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/3.jpg" alt="咸鱼 blog"></p>
-<p>当我正常用get请求url的时候，返回就只有个框架，其余东西啥都没有，我一心想不应该啊，然后看了眼网页源码。</p>
-<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/5.jpg" alt="咸鱼 blog"></p>
-<p>居然也只是个框架，于是默默的打开了抓包，看看是那个包返回的数据。</p>
-<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/6.jpg" alt="咸鱼 blog"></p>
-<p>访问了下这条url</p>
-<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/7.jpg" alt="咸鱼 blog"></p>
-<p>返回了，很经典的json的语法，看来是这条包了，一看链接有个api就应该是请求这条腾讯招聘的接口就能拿到想要的数据。</p>
-<p>分析了一下这条url</p>
-<p>关键参数就几个，一个毫秒的时间戳13位，一个职务，页数，让接口返回多少条职务信息</p>
-<p>就这些参数了，直接请求接口就能返回了。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jsonpath</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="string">"""</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @Date:    2019.12.23</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @QQ_VX:   28441096</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @Author:  牛浩东</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @Project: 腾讯招聘</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @blog: https://weiyin666.github.io</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"><span class="string">"""</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_time</span><span class="params">()</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">    times = time.time()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">return</span> int(round(times * <span class="number">1000</span>))<span class="comment">#定义一个函数get_time</span></span></pre></td></tr></table></figure>
-<p>因为需要个时间戳，每次都写太麻烦了，定义了个get_time的函数，用return返回了时间戳，每次用的时候调用这个函数就行。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_urls</span><span class="params">(url)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    response = requests.get(url, HEADERS)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    text = response.text<span class="comment">#返回为json数据</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    text_json = json.loads(text)<span class="comment">#json读取</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    json_lists = jsonpath.jsonpath(text_json,<span class="string">'$..PostId'</span>)<span class="comment">#用jsonpath读取数据</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    json_lists = map(<span class="keyword">lambda</span> url: ul + url + uls, json_lists)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">return</span> json_lists</span></pre></td></tr></table></figure>
-<p>因为是json的语法，就用json解析后，使用jsonpath把数据读取出来，然后使用lambda把遍历出来的招聘详情页的id拼接到那个api接口里，获取到正常的api接口后，接下来就是访问解析详情页了。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">details_Page</span><span class="params">(url)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    response = requests.get(url, HEADERS)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    text = response.text<span class="comment">#返回为json数据</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    text_json = json.loads(text)<span class="comment">#json读取</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    json_title = jsonpath.jsonpath(text_json,<span class="string">'$..RecruitPostName'</span>)<span class="comment">#标题</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    json_Responsibility = jsonpath.jsonpath(text_json,<span class="string">'$..Responsibility'</span>)<span class="comment">#职责</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    <span class="comment">#只提取俩个数据，其他需要什么数据按照上面提取json的属性值就行了</span></span></pre></td></tr></table></figure>
-<p>requests库get请求接口，返回数据json读取，然后jsonpath提取json数据里的属性值，现在该有的都有了，接下来就是保存了。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_details</span><span class="params">(title,Responsibility)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    fout.write(<span class="string">'职位名称:'</span> + title + <span class="string">' -- '</span> + <span class="string">'职责:'</span> + Responsibility +<span class="string">'\n'</span>)</span></pre></td></tr></table></figure>
-<p>保存一下数据，但是，处理数据的时候发现，json取到的属性值他不规则，但是一个个去处理文本比较麻烦。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">str_rule</span><span class="params">(rule)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    rules = str(rule).replace(<span class="string">"['"</span>,<span class="string">''</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    rules = str(rules).replace(<span class="string">"']"</span>,<span class="string">''</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    rules = str(rules).replace(<span class="string">"\\n"</span>,<span class="string">''</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    rules = str(rules).replace(<span class="string">"\\r"</span>,<span class="string">''</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">return</span> rules</span></pre></td></tr></table></figure>
-<p>然后写了个函数str_rule，直接把替换的规则写好，传入json取出来的属性传入函数里，使用里面的替换规则走一遍，数据就处理好了，正常返回就行了。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>比昨天的电影天堂麻烦，但是数据好处理，json直接读属性，比较规则的平台。</p>
-<p> 今天的笔记分享到这里就结束了。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-     </div>
-	<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://weiyin666.github.io/2019/12/22/%E7%94%B5%E5%BD%B1%E5%A4%A9%E5%A0%82%E7%88%AC%E5%8F%96-python/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/1.JPG">
-      <meta itemprop="name" content="牛浩东">
-      <meta itemprop="description" content="涉猎的主要编程语言为 Python领域技术分享。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="咸鱼blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/12/22/%E7%94%B5%E5%BD%B1%E5%A4%A9%E5%A0%82%E7%88%AC%E5%8F%96-python/" class="post-title-link" itemprop="url">电影天堂爬取-python</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-22 18:50:14 / 修改时间：20:39:07" itemprop="dateCreated datePublished" datetime="2019-12-22T18:50:14+08:00">2019-12-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
- 
-	<div class="post-body" itemprop="articleBody">
-	<div>
-      
-          <h2 id="获取单页的电影详情"><a href="#获取单页的电影详情" class="headerlink" title="获取单页的电影详情"></a>获取单页的电影详情</h2><p><img src="https://weiyi5.com/wp-content/uploads/2019/12/1.png" alt="咸鱼 blog"></p>
-<p>很明显看出来list<em>23</em>后面的数字是代表第几页</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="string">"""</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="string">遍历出单页所有的电影详情的链接</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @Date:    2019.12.22</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @QQ_VX:   28441096</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @Author:  牛浩东</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @Project: 天堂之家电影爬取</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @blog: https://weiyin666.github.io</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="string">"""</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">HEADERS =&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_urls</span><span class="params">(url)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">    response = requests.get(url,HEADERS)<span class="comment">#get请求url</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">    text = response.text<span class="comment">#获取响应的返回</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">    html = etree.HTML(text)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">    detail_urls = html.xpath(<span class="string">"//table[@class='tbspan']//a/@href"</span>)<span class="comment">#使用xpath定位元素</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">for</span> detail_url <span class="keyword">in</span> detail_urls:<span class="comment">#遍历所有的a标签的herf属性</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">        print(<span class="string">'https://dytt8.net'</span> + detail_url)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">    get_urls(<span class="string">'https://dytt8.net/html/gndy/dyzz/list_23_1.html'</span>)</span></pre></td></tr></table></figure>
-<p>首先定义HEADERS，创建函数get_urls传入参数url，get发送请求获取响应，使用Xpath定位元素</p>
-<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/2.png" alt="咸鱼 blog"></p>
-<p>因为浏览器点击超链接跳转电影详情页的时候会自动添加前缀<a href="https://dytt8.net，所以我们打印使用xpath获取到的值给他拼接一个前缀" target="_blank" rel="noopener">https://dytt8.net，所以我们打印使用xpath获取到的值给他拼接一个前缀</a></p>
-<h2 id="获取多个页面所有电影详情"><a href="#获取多个页面所有电影详情" class="headerlink" title="获取多个页面所有电影详情"></a>获取多个页面所有电影详情</h2><p>写爬虫不可能每次爬一个列表页，那么接下来就遍历多个列表页的所有电影详情的链接</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="string">"""</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="string">获取多个列表页的所有电影详情的链接</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @Date:    2019.12.22</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @QQ_VX:   28441096</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @Author:  牛浩东</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @Project: 天堂之家电影爬取</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="string">     @blog: https://weiyin666.github.io</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="string">"""</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">HEADERS =&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">ul = <span class="string">'https://dytt8.net'</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_urls</span><span class="params">(url)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">    response = requests.get(url,HEADERS)<span class="comment">#get请求url</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">    text = response.text<span class="comment">#获取响应的返回</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">    html = etree.HTML(text)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">    detail_urls = html.xpath(<span class="string">"//table[@class='tbspan']//a/@href"</span>)<span class="comment">#使用xpath定位元素</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">    detail_urls = map(<span class="keyword">lambda</span> url:ul+url,detail_urls)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">    <span class="string">"""</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line"><span class="string">    lambda表达式相当于一个匿名函数</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line"><span class="string">    等于</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line"><span class="string">    def abc():#定义一个函数</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">25</span></pre></td><td class="code"><pre><span class="line"><span class="string">        return ul+url</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">26</span></pre></td><td class="code"><pre><span class="line"><span class="string">    index = 0#定义一个下标</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">27</span></pre></td><td class="code"><pre><span class="line"><span class="string">    for detail_url in detail_urls:#遍历所有详情的url</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">28</span></pre></td><td class="code"><pre><span class="line"><span class="string">        detail_url = abc(detail_url)#调用abc函数</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">29</span></pre></td><td class="code"><pre><span class="line"><span class="string">        detail_urls[index] = detail_url</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">30</span></pre></td><td class="code"><pre><span class="line"><span class="string">        index += 1</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">31</span></pre></td><td class="code"><pre><span class="line"><span class="string">    """</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">32</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">return</span> detail_urls</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">33</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">spider</span><span class="params">()</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">34</span></pre></td><td class="code"><pre><span class="line">    <span class="string">"""</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">35</span></pre></td><td class="code"><pre><span class="line"><span class="string">    爬虫入口</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">36</span></pre></td><td class="code"><pre><span class="line"><span class="string">    """</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">37</span></pre></td><td class="code"><pre><span class="line">    base_url = <span class="string">'https://dytt8.net/html/gndy/dyzz/list_23_&#123;&#125;.html'</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">38</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">3</span>):<span class="comment">#range第二个数字只会指定到-1的位数也就是2</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">39</span></pre></td><td class="code"><pre><span class="line">        url = base_url.format(x)<span class="comment">#构建好了你想获取列表页</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">40</span></pre></td><td class="code"><pre><span class="line">        detail_urls = get_urls(url)<span class="comment">#调用函数get_ulrs把详情页列表url传进去</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">41</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">for</span> detail_url <span class="keyword">in</span> detail_urls:<span class="comment">#遍历每一个详情页的所有电影链接</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">42</span></pre></td><td class="code"><pre><span class="line">            print(detail_url)<span class="comment">#打印出所有的url</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">43</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">44</span></pre></td><td class="code"><pre><span class="line">    spider()</span></pre></td></tr></table></figure>
-<h3 id="获取每个详情页的信息"><a href="#获取每个详情页的信息" class="headerlink" title="获取每个详情页的信息"></a>获取每个详情页的信息</h3><p>每个列表页和列表页内所有的电影url搞定了接下来就是请求电影详情页获取电影详细信息</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Details_page</span><span class="params">(url)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    response = requests.get(url,headers=HEADERS)<span class="comment">#访问详情页</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    text = response.content.decode(<span class="string">"gbk"</span>, errors=<span class="string">'ignore'</span>)<span class="comment">#解析返回的详情页，使用gbk解码</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    html = etree.HTML(text)<span class="comment">#创建xpath</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    title = html.xpath(<span class="string">"//div[@class='title_all']//font[@color='#07519a']/text()"</span>)[<span class="number">0</span>]<span class="comment">#使用xpath语法获取详情页需要的内容,如标题，下载链接，演员等...,一个例子其他照葫芦画瓢</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    print(title)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    <span class="string">"""</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="string">    打印出电影详情页的title</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="string">    """</span></span></pre></td></tr></table></figure>
-<p>获取到了电影详情页的内容，那么接下来就是写到本地txt文件了。</p>
-<h3 id="保存本地txt文档"><a href="#保存本地txt文档" class="headerlink" title="保存本地txt文档"></a>保存本地txt文档</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">fout = open(<span class="string">"电影天堂爬取.txt"</span>, <span class="string">"w"</span>, encoding=<span class="string">'utf-8'</span>)<span class="comment">#先创建个txt文本,写入文本切记设置一个编码格式，utf-8的编码</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_movie</span><span class="params">(title,img)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    <span class="string">"""</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="string">    save_movie爬取到详情信息调用这个函数传入参数，需要那些详情信息自行传入参数，这里做了个例子之传入了标题和海报</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="string">    fout.write中\n是换行符的意思,没有的话就会全部连在一块，看不了</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="string">    """</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    fout.write(<span class="string">'电影名称：'</span>+title+<span class="string">'----'</span>+<span class="string">'电影海报:'</span>+img+<span class="string">'\n'</span>)</span></pre></td></tr></table></figure>
-<p>到这里就彻底结束了，码了好几个小时的代码，写个笔记，在熟悉一下。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-     </div>
-	<div>
-      
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://weiyin666.github.io/2019/12/10/%E9%85%8D%E7%BD%AE%20GitHub%20SSH%20%E8%BF%9E%E6%8E%A5SSHkey/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -618,21 +399,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">1</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -680,8 +449,8 @@
 
 <div class="copyright">
   
-  &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -691,13 +460,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">5k</span>
+    <span title="站点总字数">1k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">9 分钟</span>
+    <span title="站点阅读时长">1 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.1.0
   </div>
