@@ -1284,7 +1284,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #8c79e3;
+  background: #409622;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1623,7 +1623,7 @@ pre .javascript .function {
   }
 }
 body {
-  background: url("/images/weiyi.jpg");
+  background: url("weiyi.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
