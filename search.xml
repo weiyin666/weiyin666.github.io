@@ -1,40 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>配置 GitHub SSH 连接SSHkey</title>
-    <url>/2019/12/10/%E9%85%8D%E7%BD%AE%20GitHub%20SSH%20%E8%BF%9E%E6%8E%A5SSHkey/</url>
-    <content><![CDATA[<h2 id="添加SSHkey"><a href="#添加SSHkey" class="headerlink" title="添加SSHkey"></a>添加SSHkey</h2><blockquote>
-<h2 id="SSH介绍"><a href="#SSH介绍" class="headerlink" title="SSH介绍"></a>SSH介绍</h2><ul>
-<li>简单说，SSH是一种<strong>网络协议</strong>，用于计算机之间的<strong>加密登录</strong>。 </li>
-<li>如果一个用户从本地计算机，<strong>使用SSH</strong>协议登录另一台远程计算机，我们就可以认为，这种登录是<strong>安全</strong>的，即使被中途截获，密码也不会泄露。 </li>
-<li>最早的时候，互联网通信都是明文通信，一旦被截获，内容就暴露无疑。1995年，芬兰学者TatuYlonen设计了SSH协议，将<strong>登录信息全部加密</strong>，成为互联网安全的一个基本解决方案，迅速在全世界获得推广，目前已经成为Linux系统的标准配置。 </li>
-<li>在这里你只需要知道使用GitHub之前需要添加SSHkey，用来验证GitHub远程仓库就可以了，如果想深入了解原理，参考 <a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html" target="_blank" rel="noopener"> 阮一峰老师的SSH原理 </a></li>
-</ul>
-</blockquote>
-<h2 id="获取SSHKEY"><a href="#获取SSHKEY" class="headerlink" title="获取SSHKEY"></a>获取SSHKEY</h2><p>首先打开Git Bash</p>
-<p>复制运行 <code>ssh-keygen -t rsa -b 4096 -C &quot;你的邮箱&quot;</code>，注意填写你的真实邮箱。(温馨提示Git Bash的复制键是Insert) </p>
-<p>按回车三次</p>
-<p> 参考示例： </p>
-<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/KQGNGTOXZ9ODRXKGG30.png" alt="咸鱼 blog"></p>
-<p> 这时会在~目录下生成一个.ssh的隐藏文件</p>
-<p> 运行 <code>cat ~/.ssh/id_rsa.pub</code>，得到一串东西，完整的复制这串东西 </p>
-<p>参考示例： </p>
-<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/EI94MKO58V1Z2CO3MU9.png" alt="咸鱼 blog"></p>
-<p>然后打开Git Hub  链接：<a href="https://github.com/settings/keys" target="_blank" rel="noopener">https://github.com/settings/keys</a> </p>
-<p>在Title框里随便填</p>
-<p>然后把刚刚复制的一长串东西粘贴到key框里，点Add SSH key就好了。</p>
-<p>参考示例： </p>
-<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/DBU22FVK6G306XM0.png" alt="咸鱼 blog"></p>
-<p>然后回到Git Bash</p>
-<p>运行  <code>ssh -T git@github.com</code> 你会看到以下提示：</p>
-<p><img src="https://weiyi5.com/wp-content/uploads/2019/12/KWLGZ179EZDWYA3ADEOG.png" alt="咸鱼 blog"></p>
-<p>就说明你成功了！</p>
-<ul>
-<li>一台电脑只需要一个 SSH key</li>
-<li>一个 SSH key 可以访问你的所有仓库，即使你有 1000000 个仓库，都没问题</li>
-<li>如果你新买了电脑，就在新电脑上重新生成一个 SSH key，把这个 key 也上传到 GitHub，它可以和之前的 key 共存在 GitHub 上</li>
-<li>如果你把 key 从电脑上删除了，重新生成一个 key 即可，替换之前的 key </li>
-</ul>
+    <title>JS逆向|某漫画</title>
+    <url>/posts/manhuagui.html</url>
+    <content><![CDATA[<p> <strong>声明：本文只作学习研究，禁止用于非法用途，否则后果自负，如有侵权，请告知删除，谢谢！</strong></p>
+<p>分析网站：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">aHR0cHM6Ly93d3cubWFuaHVhZ3VpLmNvbS8=</span></pre></td></tr></table></figure>
+<p><center><h4>抓包分析与加密定位</h4></center><br>加密参数和接口地址在这：</p>
+<p><img src="https://ae01.alicdn.com/kf/H842d9285f9354c49acf133ec42da6ad2H.jpg" alt="辰稳blog"></p>
+<p>全局搜索cid=，然后打上断点。</p>
+<p><img src="https://ae01.alicdn.com/kf/H7dacb6fc7ac2490299f2291a73327f25y.jpg" alt="辰稳blog"></p>
+<p>重新请求后，触发断点，跟进堆栈：</p>
+<p><img src="https://ae01.alicdn.com/kf/Hb293eb45341947058fab412e1059b8ebo.jpg" alt="辰稳blog"></p>
+<p>看到了，cid和md5参数已经出来了，在跟到上一层。</p>
+<p><img src="https://ae01.alicdn.com/kf/H56a061613e0f48a6a6705be19b54ea5eJ.jpg" alt="辰稳blog"></p>
+<p>这里的”\x65\x76\x61\x6c”,是eval的十六进制形式，copy在控制台输出一下。</p>
+<p><img src="https://ae01.alicdn.com/kf/H4e90804db3de4e49ad8c82614c34e6be4.jpg" alt="辰稳blog"></p>
+<p>在node运行，报错了:</p>
+<p><img src="https://ae01.alicdn.com/kf/H0fa2e35b2bcb4f1da0c9064a3c8ce4ffK.jpg" alt="辰稳blog"></p>
+<p> splic不是一个函数，确实也没见过 splic这个函数，只见过 split，从这代码上看，比较像split，看着像base64但是肯定不是。</p>
+<p>splic是字符串方法，直接在浏览器看。</p>
+<p><img src="https://ae01.alicdn.com/kf/H4f67895676a342f6b0c8a3fe960811e9k.jpg" alt="辰稳blog"></p>
+<p>双击跟进去，把整个代码复制下来，加到刚刚JS里面。</p>
+<p><img src="https://ae01.alicdn.com/kf/Haccd97d70bf24fcdb9bda1493ef2b63aL.jpg" alt="辰稳 blog"></p>
+<p>再次运行，结果就出来了。</p>
+<p><img src="https://ae01.alicdn.com/kf/H11f67c5b24d847449d7b2953cc035289J.jpg" alt="辰稳blog"></p>
+<p><h4><center>总结</center></h4><br>这个平台，之前试着分析，那会水平不够，也是看了一个大佬的文章才知道有这么个库 <strong>LZString</strong> 其GitHub地址：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">https://github.com/pieroxy/lz-string/</span></pre></td></tr></table></figure>
 ]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
   </entry>
 </search>
