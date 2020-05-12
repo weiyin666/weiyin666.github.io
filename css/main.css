@@ -1691,13 +1691,6 @@ body {
 .use-motion .collection-header {
   opacity: 0;
 }
-body {
-  background: url("http://pic.netbian.com/uploads/allimg/191012/103831-15708479117885.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: 50% 50%;
-}
 .main-inner {
   background: #fff;
   opacity: 0.8;
